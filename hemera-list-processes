@@ -1,0 +1,3 @@
+#!/bin/bash
+for dir in `ls -d /proc/[0123456789]*`; do test -d $dir || continue; echo $dir; cat $dir/cmdline;echo; cat $dir/stat; readlink $dir/exe; printf 'x--''---'; done
+

@@ -1,0 +1,58 @@
+#!/bin/bash
+
+# External variables
+PROJECT_PATH="${1}"
+ARCH="${2}"
+
+if [ "${ARCH}" == "" ]; then
+  ARCH="${HEMERA_BUILD_ARCH}"
+fi
+if [ "${ARCH}" == "" ]; then
+  ARCH="i586"
+fi
+
+# Common variables
+SHARED_SOURCE_BASE="/usr/share/hemera-devel-tools"
+SHARED_SOURCE_PATHS="${SHARED_SOURCE_BASE}/hemera-vars-paths"
+SHARED_SOURCE_SB2="${SHARED_SOURCE_BASE}/hemera-vars-sb2"
+
+if ! [ -f "${SHARED_SOURCE_PATHS}" ]; then
+  echo "Missing \"${SHARED_SOURCE_PATHS}\" source file. Cannot continue."
+  exit 1
+fi
+source "${SHARED_SOURCE_PATHS}"
+
+if [ "${ARCH}" != "i586" ]; then
+  if ! [ -f "${SHARED_SOURCE_SB2}" ]; then
+    echo "Missing \"${SHARED_SOURCE_SB2}\" source file. Cannot continue."
+    exit 1
+  fi
+  source "${SHARED_SOURCE_SB2}"
+fi
+
+# Other variables
+if [ "${ARCH}" == "i586" ]; then
+  FULL_BUILD_PATH="${BUILD_PATH}"
+  EXECUTOR=""
+else
+  FULL_BUILD_PATH="${TARGET_PATH}${BUILD_PATH}"
+  EXECUTOR="${SB2TMR}"
+fi
+
+ARGS=( "$@" )
+CMAKE_EXTRA_ARGS=""
+I=2
+while [ $I -lt $# ]; do
+  if [ $I -eq 2 ]; then
+    CMAKE_EXTRA_ARGS="${ARGS[$I]}"
+  else
+    CMAKE_EXTRA_ARGS="${CMAKE_EXTRA_ARGS} ${ARGS[$I]}"
+  fi
+  let I=I+1
+done
+
+# Let's do the work
+mkdir -p ${FULL_BUILD_PATH} &&
+cd ${FULL_BUILD_PATH} &&
+${EXECUTOR} cmake ${SRC_PATH} ${CMAKE_EXTRA_ARGS}
+exit $?

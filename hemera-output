@@ -1,0 +1,21 @@
+#!/bin/bash
+
+# External variables
+APPLICATION_ID="${1}"
+SERVICE_FILE=/usr/lib/systemd/user/${APPLICATION_ID}.service
+
+# Does it exist?
+if ! [ -f "${SERVICE_FILE}" ]; then
+  echo "Missing service file for ${APPLICATION_ID}"
+  exit 1
+fi
+
+EXE=$( grep ExecStart= "${SERVICE_FILE}" | cut -d "=" -f 2 | cut -d " " -f 1 )
+
+if [ -z "${EXE}" ] || [ ! -f "${EXE}" ]; then
+  echo "No executable found"
+  exit 1
+fi
+
+# Let's do the work
+journalctl ${EXE} -o cat --no-pager

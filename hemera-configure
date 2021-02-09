@@ -1,0 +1,38 @@
+#!/bin/bash
+
+# External variables
+PROJECT_PATH="${1}"
+HA_FILE_NAME="${2}"
+
+# Common variables
+SHARED_SOURCE_BASE="/usr/share/hemera-devel-tools"
+SHARED_SOURCE_PATHS="${SHARED_SOURCE_BASE}/hemera-vars-paths"
+
+if ! [ -f "${SHARED_SOURCE_PATHS}" ]; then
+  echo "Missing \"${SHARED_SOURCE_PATHS}\" source file. Cannot continue."
+  exit 1
+fi
+source "${SHARED_SOURCE_PATHS}"
+
+# Other variables
+HA_FILE=""
+if [ "${HA_FILE_NAME}" == "" ]; then
+  for FILE in $( ls "${SRC_PATH}"/*.ha ); do
+    if [ "${HA_FILE}" == "" ]; then
+      HA_FILE="${FILE}"
+    else
+      echo "There are more than one \".ha\" file and you didn't specify which one you want to use"
+      exit 1
+    fi
+  done
+else
+  HA_FILE="${SRC_PATH}/${HA_FILE_NAME}"
+fi
+if ! [ -f "$HA_FILE" ]; then
+  echo "Missing file \"$HA_FILE\""
+  exit 1
+fi
+
+# Let's do the work
+/usr/libexec/hemera/tools/hemera-configure "${HA_FILE}" "${SRC_PATH}"
+exit $?

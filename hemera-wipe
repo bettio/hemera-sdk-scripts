@@ -1,0 +1,3 @@
+#!/bin/bash
+rm -fr /build
+find /srv/hemera/targets -mindepth 2 -maxdepth 2 -type d -name "build" -exec rm -fr {} \;

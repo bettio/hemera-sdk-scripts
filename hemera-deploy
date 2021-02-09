@@ -1,0 +1,12 @@
+#!/bin/bash
+
+RPM_PATH="${1}"
+RPM_NAME=$( basename ${RPM_PATH} )
+
+rpm -q $( rpm -qp --queryformat '%{NAME}' "${RPM_PATH}" ) > /dev/null
+REBOOT_TARGET=$?
+rpm -i --force "${RPM_PATH}" 2>&1
+if [ "${REBOOT_TARGET}" != "0" ]; then
+  reboot &
+fi
+exit $?

@@ -1,0 +1,12 @@
+#!/bin/bash
+
+# External variables
+PROJECT_PATH="${1}"
+ARCH="${2}"
+
+# Let's do the work
+hemera-cmake "${PROJECT_PATH}" "${ARCH}" &&
+hemera-make "${PROJECT_PATH}" "${ARCH}" &&
+hemera-make-install "${PROJECT_PATH}" "${ARCH}" &&
+hemera-rpmbuild "${PROJECT_PATH}" "${ARCH}"
+exit $?

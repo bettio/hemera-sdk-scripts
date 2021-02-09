@@ -1,0 +1,10 @@
+# This file is sourced by all Hemera SDK scripts in /usr/bin.
+# Don't delete this or they will stop working.
+
+SRC_PATH="/home/developer/${PROJECT_PATH}"
+BUILD_PATH="/build/${PROJECT_PATH}"
+BUILD_BASE_PATH="/build"
+
+RPMB_PATH="/root/rpmbuild"
+RPMB_SOURCES_PATH="${RPMB_PATH}/SOURCES"
+RPMB_RPMS_PATH="${RPMB_PATH}/RPMS"

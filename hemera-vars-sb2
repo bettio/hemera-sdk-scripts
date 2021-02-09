@@ -1,0 +1,15 @@
+# This file is sourced by all Hemera SDK scripts in /usr/bin.
+# Don't delete this or they will stop working.
+
+TARGETS_BASE_PATH="/srv/hemera/targets"
+TARGET="Hemera-${ARCH}"
+TARGET_PATH="${TARGETS_BASE_PATH}/${TARGET}"
+
+if ! [ -d "${TARGET_PATH}" ]; then
+  echo "This VM cannot build for \"${ARCH}\" architecture"
+  exit 1
+fi
+
+SB2T="sb2 -t ${TARGET}"
+SB2TM="${SB2T} -m sdk-install"
+SB2TMR="${SB2TM} -R"
